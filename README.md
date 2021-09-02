@@ -1,33 +1,35 @@
 In this task I used the dataset from https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip
 
 Steps:
+======
 
 1.
-I downloaded the files
-I created a train dataset and a test dataset
-I joined both datasets in a new dataset: "data_total"
+- I downloaded the files
+- I created a train dataset and a test dataset
+- I joined both datasets in a new dataset: "data_total"
 
 2.
-I found all the variables whose names had the word "mean" or "std", and I added the ID variables
-I usded the grep() function
-Then I selected these variables from the original "data_total"
-I named the new dataset "data_selected"
+- I found all the variables whose names had the word "mean" or "std", and I added the ID variables
+- I usded the grep() function
+- Then I selected these variables from the original "data_total"
+- I named the new dataset "data_selected"
 
 3.
-I added lebels to the activity variable using "activity_labels.txt"
-I used the factor() function
+- I added lebels to the activity variable using "activity_labels.txt"
+- I used the factor() function
 
 4.
-I tidied the variables names using the sub() and the str_trim() functions
+- I tidied the variables names using the sub() and the str_trim() functions
 
 5.
-I summarise using the group_by() function
+- I summarise using the group_by() function
 
 
 Script:
+======
 
 
-# 1. Merges the training and the test sets to create one data set. ----------------
+# 1. Merges the training and the test sets to create one data set
 
 library(readr)
 url="https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip"
@@ -59,13 +61,13 @@ data_total = rbind(data_train,data_test)
 rm(list=setdiff(ls(), "data_total"))
 
 
-# 2. Extracts only the measurements on the mean and standard deviation for each measurement.  -----------------
+# 2. Extracts only the measurements on the mean and standard deviation for each measurement
 
 vector_mean_std = grep("subject|activity|mean\\(\\)|std\\(\\)", names(data_total), value = TRUE)
 data_selected = data_total[,vector_mean_std]
 
 
-# 3. Uses descriptive activity names to name the activities in the data set   -----------------
+# 3. Uses descriptive activity names to name the activities in the data set 
 
 activity_labels = read_delim("./UCI HAR Dataset/activity_labels.txt", " ", col_names = FALSE)
 
@@ -74,7 +76,7 @@ data_total$activity = factor(data_total$activity, labels=vector_labels) # in dat
 data_selected$activity = factor(data_selected$activity, labels=vector_labels) #in data_selected
 
 
-# 4. Appropriately labels the data set with descriptive variable names.   -----------------
+# 4. Appropriately labels the data set with descriptive variable names.
 
 names = sub("^[0-9]+", "", names(data_selected)) #delete number
 library(stringr)
